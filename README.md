@@ -45,3 +45,7 @@ ___
 kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-first-application
 > should get all messages again
 ```
+
+## Kafka UI
+https://www.kafkatool.com/
+
