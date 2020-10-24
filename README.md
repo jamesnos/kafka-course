@@ -118,7 +118,7 @@ aws kafka describe-cluster --region ap-southeast-1 --cluster-arn "arn:aws:kafka:
 ## Connect to Zookeeper
 ```
 ZookeeperConnectString="z-3.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-2.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181"
-kafka-topics --create --zookeeper $ZookeeperConnectString --replication-factor 2 --partitions 1 --topic AWSKafkaTutorialTopic
+kafka-topics --create --zookeeper $ZookeeperConnectString --replication-factor 2 --partitions 1 --topic first_topic
 kafka-topics --zookeeper $ZookeeperConnectString --list
 ```
 
@@ -128,8 +128,8 @@ aws kafka get-bootstrap-brokers --region ap-southeast-1 --cluster-arn "arn:aws:k
 
 BrokerStringTls="b-2.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9094,b-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9094"
 
-kafka-console-producer --broker-list $BrokerStringTls --topic AWSKafkaTutorialTopic
-kafka-console-consumer --bootstrap-server b-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9092 --topic AWSKafkaTutorialTopic --group my-first-application
+kafka-console-producer --broker-list $BrokerStringTls --topic first_topic
+kafka-console-consumer --bootstrap-server $BrokerStringTls --topic first_topic --group my-first-application
 ```
 
 
