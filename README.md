@@ -133,3 +133,14 @@ kafka-console-consumer --bootstrap-server b-1.test.fw5mj3.c2.kafka.ap-southeast-
 ```
 
 
+# Python Library
+https://github.com/dpkp/kafka-python
+
+```
+>>> from kafka import KafkaConsumer
+>>> consumer = KafkaConsumer('first_topic', group_id='my_favorite_group', bootstrap_servers='127.0.0.1:9092')
+>>> for msg in consumer:
+...     print(msg)
+...
+ConsumerRecord(topic='first_topic', partition=2, offset=21, timestamp=1603524119363, timestamp_type=0, key=None, value=b'3d', headers=[], checksum=None, serialized_key_size=-1, serialized_value_size=2, serialized_header_size=-1)
+```
