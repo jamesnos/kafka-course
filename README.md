@@ -1,4 +1,4 @@
-# kafka-course
+# Kafka Course
 
 ## Install
 ```
@@ -64,3 +64,72 @@ https://www.kafkatool.com/
 
 ## Kafka docker
 https://github.com/simplesteph/kafka-stack-docker-compose
+
+# AWS Amazon Kafka MSK
+https://docs.aws.amazon.com/msk/latest/developerguide/create-topic.html
+
+## Describe Cluster
+```
+aws kafka describe-cluster --region ap-southeast-1 --cluster-arn "arn:aws:kafka:ap-southeast-1:174778257743:cluster/test/a1c9d734-56b9-432a-8c43-49a9c7c90f07-2"
+
+{
+    "ClusterInfo": {
+        "BrokerNodeGroupInfo": {
+            "BrokerAZDistribution": "DEFAULT",
+            "ClientSubnets": [
+                "subnet-0955437479e561276",
+                "subnet-08f6e22555912e81a"
+            ],
+            "InstanceType": "kafka.t3.small",
+            "SecurityGroups": [
+                "sg-04c5aaedcc769f989"
+            ],
+            "StorageInfo": {
+                "EbsStorageInfo": {
+                    "VolumeSize": 1000
+                }
+            }
+        },
+        "ClusterArn": "arn:aws:kafka:ap-southeast-1:174778257743:cluster/test/a1c9d734-56b9-432a-8c43-49a9c7c90f07-2",
+        "ClusterName": "test",
+        "CreationTime": "2020-10-24T04:46:05.246Z",
+        "CurrentBrokerSoftwareInfo": {
+            "KafkaVersion": "2.6.0"
+        },
+        "CurrentVersion": "K3P5ROKL5A1OLE",
+        "EncryptionInfo": {
+            "EncryptionAtRest": {
+                "DataVolumeKMSKeyId": "arn:aws:kms:ap-southeast-1:174778257743:key/cfe07aca-8508-4b77-9913-f672ce998b63"
+            },
+            "EncryptionInTransit": {
+                "ClientBroker": "TLS",
+                "InCluster": true
+            }
+        },
+        "EnhancedMonitoring": "DEFAULT",
+        "NumberOfBrokerNodes": 2,
+        "State": "ACTIVE",
+        "Tags": {},
+        "ZookeeperConnectString": "z-3.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-2.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181"
+    }
+}
+```
+
+## Connect to Zookeeper
+```
+ZookeeperConnectString="z-3.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181,z-2.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:2181"
+kafka-topics --create --zookeeper $ZookeeperConnectString --replication-factor 2 --partitions 1 --topic AWSKafkaTutorialTopic
+kafka-topics --zookeeper $ZookeeperConnectString --list
+```
+
+## Produce / Consume
+```
+aws kafka get-bootstrap-brokers --region ap-southeast-1 --cluster-arn "arn:aws:kafka:ap-southeast-1:174778257743:cluster/test/a1c9d734-56b9-432a-8c43-49a9c7c90f07-2"
+
+BrokerStringTls="b-2.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9094,b-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9094"
+
+kafka-console-producer --broker-list $BrokerStringTls --topic AWSKafkaTutorialTopic
+kafka-console-consumer --bootstrap-server b-1.test.fw5mj3.c2.kafka.ap-southeast-1.amazonaws.com:9092 --topic AWSKafkaTutorialTopic --group my-first-application
+```
+
+
