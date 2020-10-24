@@ -62,3 +62,5 @@ kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --g
 ## Kafka UI
 https://www.kafkatool.com/
 
+## Kafka docker
+https://github.com/simplesteph/kafka-stack-docker-compose
