@@ -1,5 +1,18 @@
 # kafka-course
 
+## Install
+```
+Install binaries https://kafka.apache.org/downloads 2.6.0 Scala 2.13 
+#export PATH="$PATH:/Users/jamesnos/kafka_2.13-2.6.0/bin"
+or
+brew install kafka
+```
+
+## Working Dir
+```
+cd /Users/jamesnos/kafka_2.13-2.6.0
+```
+
 ## Starting Servers
 ```
 zookeeper-server-start config/zookeeper.properties
