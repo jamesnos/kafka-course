@@ -144,3 +144,69 @@ https://github.com/dpkp/kafka-python
 ...
 ConsumerRecord(topic='first_topic', partition=2, offset=21, timestamp=1603524119363, timestamp_type=0, key=None, value=b'3d', headers=[], checksum=None, serialized_key_size=-1, serialized_value_size=2, serialized_header_size=-1)
 ```
+
+Django Producer
+```
+class EventSerializer(serializers.Serializer):
+    MESSAGE_TYPE = 'event'
+    VERSION = 1
+    KEY_FIELD = 'uuid'
+    
+    id = serializers.IntegerField()
+    uuid = serializers.UUIDField()
+    event_name = serializers.CharField(max_length=200)
+    event_description = serializers.CharField(max_length=200)
+
+class ProducerView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        uuid_id = uuid.uuid4()
+        test = {'id': 386, 'uuid': uuid_id, 'event_name': 'new', 'event_description': 'new2'}
+        producer = Producer('event', serializers.EventSerializer)
+        producer.send(test)
+        content = {'message': 'producer'}
+        return Response(content)
+```
+
+Django consumer
+```
+from io import BytesIO
+
+_delim = b':'
+_formats = {}
+
+
+def _bytes(seq):
+    return seq.encode() if hasattr(seq, 'encode') else seq
+
+def parse(data):
+    data = _bytes(data)
+    code, body = data.split(_delim, 1)
+    # if code not in _formats:
+    #     raise UnknownFormatError('Could not find parser for format %s' % code.decode())
+    return body
+    
+class ConsumerView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        bootstrap_servers = ['b-2.mskcluster.3vjdvs.c2.kafka.ap-southeast-1.amazonaws.com:9092', 'b-1.mskcluster.3vjdvs.c2.kafka.ap-southeast-1.amazonaws.com:9092']
+
+        consumer = KafkaConsumer(
+            'event', 
+            group_id='django-consumer2', 
+            bootstrap_servers=bootstrap_servers, 
+            consumer_timeout_ms=5000,
+            auto_offset_reset='earliest', 
+            enable_auto_commit=False
+        )
+
+        res = []
+        for msg in consumer:
+            data = parse(msg.value)
+            res.append(data.decode('utf8'))
+
+        content = {'message': res}
+        return Response(content)
+```
