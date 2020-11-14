@@ -210,3 +210,49 @@ class ConsumerView(APIView):
         content = {'message': res}
         return Response(content)
 ```
+
+
+# PySpark Integration
+
+# Setup notebook and pyspark locally
+https://towardsdatascience.com/how-to-use-pyspark-on-your-computer-9c7180075617
+
+### Start notebook with package
+```
+pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0
+```
+
+### Subscribe to topic
+```
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import explode
+from pyspark.sql.functions import split
+
+spark = SparkSession.builder.appName("Operations").getOrCreate()
+
+lines = spark \
+  .readStream \
+  .format("kafka") \
+  .option("kafka.bootstrap.servers", "192.168.1.77:9092") \
+  .option("subscribe", "first_topic") \
+  .load()
+
+
+# Split the lines into words
+words = lines.select(
+   explode(
+       split(lines.value, " ")
+   ).alias("word")
+)
+
+# Generate running word count
+wordCounts = words.groupBy("word").count()
+
+query = wordCounts \
+    .writeStream \
+    .outputMode("complete") \
+    .format("console") \
+    .start()
+
+query.awaitTermination()
+```
