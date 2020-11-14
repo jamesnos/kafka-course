@@ -220,6 +220,7 @@ https://towardsdatascience.com/how-to-use-pyspark-on-your-computer-9c7180075617
 ### Start notebook with package
 ```
 pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 spark-script.py
 ```
 
 ### Subscribe to topic
@@ -258,3 +259,10 @@ query.awaitTermination()
 ```
 
 https://kontext.tech/column/streaming-analytics/475/spark-structured-streaming-read-from-and-write-into-kafka-topics
+
+### Start stand alone
+```
+/opt/spark-2.4.7/sbin/start-master.sh
+
+/opt/spark-2.4.7/sbin/start-slave.sh spark://Jamess-MBP:8081
+```
