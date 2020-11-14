@@ -256,3 +256,5 @@ query = wordCounts \
 
 query.awaitTermination()
 ```
+
+https://kontext.tech/column/streaming-analytics/475/spark-structured-streaming-read-from-and-write-into-kafka-topics
